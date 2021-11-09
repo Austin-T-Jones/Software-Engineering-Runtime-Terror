@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.target=MapMakerUI
+comment0.text=\r\n\ User\ interface\ for\ the\ Map\ Maker\ program\r\n
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment2.params=mainStage
+comment2.target=void\ start(javafx.stage.Stage)
+numComments=3
