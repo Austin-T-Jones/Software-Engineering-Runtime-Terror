@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=PaletteTile
+comment0.text=\r\n\ PaletteTile\:\ subclass\ of\ Tile\ class\r\n
+comment1.params=defaultPaletteImage
+comment1.target=PaletteTile(javafx.scene.image.Image)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ PaletteTile\r\n
+comment2.params=
+comment2.target=javafx.scene.image.Image\ getImage()
+comment2.text=\r\n\ getImage()\:\ returns\ the\ Palettetile's\ currentImage\r\n
+numComments=3

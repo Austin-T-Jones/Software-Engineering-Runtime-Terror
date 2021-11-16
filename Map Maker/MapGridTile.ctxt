@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=MapGridTile
+comment0.text=\r\n\ MapGridTile\:\ subclass\ of\ Tile\ class\r\n
+comment1.params=defaultMapGridImage
+comment1.target=MapGridTile(javafx.scene.image.Image)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ PaletteTile\r\n
+comment2.params=newImage
+comment2.target=void\ getImage(javafx.scene.image.Image)
+comment2.text=\r\n\ setImage()\:\ changes\ the\ MapGridTile's\ currentImage\r\n
+numComments=3
