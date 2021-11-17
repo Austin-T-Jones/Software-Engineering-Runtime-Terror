@@ -85,6 +85,7 @@ public class MapMakerUI extends Application
         TabPane tilePaletteTabs = new TabPane();
         tilePaletteTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         Tab paletteA = new Tab("A");
+        CreatePalette(paletteA);
         Tab paletteB = new Tab("B");
         Tab paletteC = new Tab("C");
         Tab paletteD = new Tab("D");
@@ -104,5 +105,41 @@ public class MapMakerUI extends Application
         
         
         mainStage.show();
+    }
+    
+    void CreatePalette(Tab currentTab)
+    {
+        //create a VBox that will store all the PaletteTiles
+        GridPane paletteTileBox = new GridPane(); //TODO: change VBox to GridPane
+        
+        //create array of Images pulled from Tiles folder
+        String folderName = "Tiles";
+        File imageDirectory = new File(folderName);
+        File images[] = imageDirectory.listFiles();
+        
+        //starting coordinates for tiles in GridPane
+        int x = 0; 
+        int y = 0;
+        
+        //for loop that fills the VBox with PaletteTiles for each image
+        for(int i = 0; i < images.length; i++)
+        {
+            String currentImageName = images[i].getName();
+            Image newImage = new Image(folderName + "/" + currentImageName);
+            PaletteTile newTile = new PaletteTile(newImage);
+            
+            paletteTileBox.add(newTile, x, y); //TODO: make PaletteTiles smaller
+            x++;
+            
+            //find coordinates for new tile
+            if (x > 4)
+            {
+                x = 0;
+                y++;
+            }
+        }
+        
+        //set currentTab's content to be the VBox of PaletteTiles
+        currentTab.setContent(paletteTileBox);
     }
 }

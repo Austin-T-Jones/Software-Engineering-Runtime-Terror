@@ -5,4 +5,6 @@ comment1.params=args
 comment1.target=void\ main(java.lang.String[])
 comment2.params=mainStage
 comment2.target=void\ start(javafx.stage.Stage)
-numComments=3
+comment3.params=currentTab
+comment3.target=void\ CreatePalette(javafx.scene.control.Tab)
+numComments=4
