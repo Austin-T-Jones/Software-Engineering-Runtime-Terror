@@ -1,4 +1,5 @@
 import javafx.scene.control.Button;
+import javafx.geometry.Insets;
 
 //add image support
 import javafx.scene.image.*;
@@ -18,9 +19,9 @@ public class Tile extends Button
     {
         super();
         
+        this.setPadding(Insets.EMPTY);
         this.currentImage = defaultImage;
         ImageView imageView = new ImageView(currentImage);
-        //tileButton = new Button("", imageView);
         this.setGraphic(imageView);
     }
 }
