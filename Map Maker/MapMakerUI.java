@@ -54,6 +54,9 @@ public class MapMakerUI extends Application
         Scene mainScene = new Scene(root, 800, 800);
         mainStage.setScene(mainScene);
         
+        //load the stylesheet file
+        mainScene.getStylesheets().add("stylesheet.css");
+        
         //add MenuBar at the top of the screen
         MenuBar bar = new MenuBar();
         root.setTop(bar);
@@ -132,7 +135,7 @@ public class MapMakerUI extends Application
             x++;
             
             //find coordinates for new tile
-            if (x > 4)
+            if (x > 3)
             {
                 x = 0;
                 y++;

@@ -12,6 +12,7 @@ public class PaletteTile extends Tile
     public PaletteTile(Image defaultPaletteImage)
     {
         super(defaultPaletteImage);
+        this.getStyleClass().add("palette-tile");
     }
 
     /**
