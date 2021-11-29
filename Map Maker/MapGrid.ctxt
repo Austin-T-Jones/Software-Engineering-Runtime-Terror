@@ -1,7 +1,5 @@
 #BlueJ class context
 comment0.target=MapGrid
-comment1.params=
-comment1.target=void\ MapGrid()
-comment2.params=n
-comment2.target=void\ setMapSize(int)
-numComments=3
+comment1.params=rowNum\ colNum
+comment1.target=MapGrid(int,\ int)
+numComments=2

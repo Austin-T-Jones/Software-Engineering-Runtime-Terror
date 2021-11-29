@@ -105,6 +105,14 @@ public class MapMakerUI extends Application
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
         
         
+        //display MapGrid
+        MapGrid mapGrid = new MapGrid(10, 4);
+        root.setCenter(mapGrid);
+        
+        
+        
+        //TODO: get user input for map size
+        
         
         
         mainStage.show();
@@ -112,7 +120,7 @@ public class MapMakerUI extends Application
     
     void CreatePalette(Tab currentTab)
     {
-        //create a VBox that will store all the PaletteTiles
+        //create a GridPane that will store all the PaletteTiles
         GridPane paletteTileBox = new GridPane(); //TODO: change VBox to GridPane
         
         //create array of Images pulled from Tiles folder

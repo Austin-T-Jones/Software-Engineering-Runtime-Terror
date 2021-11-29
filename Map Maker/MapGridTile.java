@@ -17,7 +17,7 @@ public class MapGridTile extends Tile
     /**
      * setImage(): changes the MapGridTile's currentImage
      */
-    public void getImage(Image newImage)
+    public void setImage(Image newImage)
     {
         currentImage = newImage;
     }
