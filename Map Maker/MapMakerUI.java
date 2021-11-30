@@ -113,7 +113,7 @@ public class MapMakerUI extends Application
         
         
         //display MapGrid
-        MapGrid mapGrid = new MapGrid(10, 4);
+        MapGrid mapGrid = new MapGrid(10, 10);
         root.setCenter(mapGrid);
         //get list of all MapGridTiles in MapGrid and listen for their events
         for(MapGridTile mapTile : mapGrid.getAllMapTiles())
