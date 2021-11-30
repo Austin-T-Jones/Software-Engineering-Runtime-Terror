@@ -121,7 +121,7 @@ public class MapMakerUI extends Application
     void CreatePalette(Tab currentTab)
     {
         //create a GridPane that will store all the PaletteTiles
-        GridPane paletteTileBox = new GridPane(); //TODO: change VBox to GridPane
+        GridPane paletteTileBox = new GridPane();
         
         //create array of Images pulled from Tiles folder
         String folderName = "Tiles";
