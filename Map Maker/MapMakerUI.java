@@ -10,6 +10,7 @@ import java.io.*;              // File, PrintWriter, ...
 import java.util.*;            // List, Scanner, Optional, ...
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.scene.control.ScrollPane;
 
 //new imports to work with images
 import javafx.scene.image.Image;
@@ -132,6 +133,7 @@ public class MapMakerUI extends Application
     void CreatePalette(Tab currentTab)
     {
         //create a GridPane that will store all the PaletteTiles
+        ScrollPane scroll = new ScrollPane();
         GridPane paletteTileBox = new GridPane();
         
         //create array of Images pulled from Tiles folder
@@ -147,7 +149,6 @@ public class MapMakerUI extends Application
         for(int i = 0; i < images.length; i++)
         {
             String currentImageName = images[i].getName();
-            System.out.println(currentImageName);
             Image newImage = new Image(folderName + "/" + currentImageName);
             PaletteTile newTile = new PaletteTile(newImage);
             
@@ -166,7 +167,8 @@ public class MapMakerUI extends Application
         }
         
         //set currentTab's content to be the GridPane of PaletteTiles
-        currentTab.setContent(paletteTileBox);
+        scroll.setContent(paletteTileBox);
+        currentTab.setContent(scroll);
     }
     
     void SetActiveTileImage(Image newImage)
