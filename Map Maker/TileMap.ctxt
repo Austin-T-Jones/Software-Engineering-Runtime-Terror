@@ -1,0 +1,14 @@
+#BlueJ class context
+comment0.target=TileMap
+comment0.text=\r\n\ Tile\ Map\ class\ \:\ Creates\ a\ Tile\ Map\ using\ a\ double\ array\r\n\ Runtime\ Terror\r\n
+comment1.params=width\ height
+comment1.target=TileMap(int,\ int)
+comment2.params=
+comment2.target=int\ getWidth()
+comment3.params=
+comment3.target=int\ getHeight()
+comment4.params=x\ y
+comment4.target=Tile\ getTile(int,\ int)
+comment5.params=x\ y\ tile
+comment5.target=void\ setTile(int,\ int,\ Tile)
+numComments=6

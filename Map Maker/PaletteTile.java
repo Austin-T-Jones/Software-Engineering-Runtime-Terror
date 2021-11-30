@@ -1,6 +1,9 @@
 //add image support
 import javafx.scene.image.*;
 
+//for button presses
+import javafx.event.ActionEvent;
+
 /**
  * PaletteTile: subclass of Tile class
  */
@@ -13,10 +16,11 @@ public class PaletteTile extends Tile
     {
         super(defaultPaletteImage);
         this.getStyleClass().add("palette-tile");
+        this.setOnAction((ActionEvent event) -> getImage());
     }
 
     /**
-     * getImage(): returns the Palettetile's currentImage
+     * getImage(): returns the PaletteTile's currentImage
      */
     public Image getImage()
     {

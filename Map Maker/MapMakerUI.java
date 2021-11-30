@@ -10,6 +10,7 @@ import java.io.*;              // File, PrintWriter, ...
 import java.util.*;            // List, Scanner, Optional, ...
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.scene.control.ScrollPane;
 
 //new imports to work with images
 import javafx.scene.image.Image;
@@ -20,11 +21,21 @@ import javafx.embed.swing.SwingFXUtils;
 //add image support
 import javafx.scene.image.*;
 
+//when Tiles are selected
+import javafx.event.ActionEvent;
+
+
+// Test Comment
+
+
 /**
  * User interface for the Map Maker program
  */
 public class MapMakerUI extends Application
 {
+    //variables
+    Image activeTileImage = new Image("Tiles/!EraseTile.png");
+    
     public static void main(String[] args) 
     {
         try
@@ -105,6 +116,19 @@ public class MapMakerUI extends Application
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
         
         
+        //display MapGrid
+        MapGrid mapGrid = new MapGrid(10, 10);
+        root.setCenter(mapGrid);
+        //get list of all MapGridTiles in MapGrid and listen for their events
+        for(MapGridTile mapTile : mapGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+        }
+        
+        
+        
+        //TODO: get user input for map size
+        
         
         
         mainStage.show();
@@ -112,8 +136,9 @@ public class MapMakerUI extends Application
     
     void CreatePalette(Tab currentTab)
     {
-        //create a VBox that will store all the PaletteTiles
-        GridPane paletteTileBox = new GridPane(); //TODO: change VBox to GridPane
+        //create a GridPane that will store all the PaletteTiles
+        ScrollPane scroll = new ScrollPane();
+        GridPane paletteTileBox = new GridPane();
         
         //create array of Images pulled from Tiles folder
         String folderName = "Tiles";
@@ -131,6 +156,9 @@ public class MapMakerUI extends Application
             Image newImage = new Image(folderName + "/" + currentImageName);
             PaletteTile newTile = new PaletteTile(newImage);
             
+            //listen for when a PaletteTile is selected
+            newTile.setOnAction((ActionEvent event) -> SetActiveTileImage(newTile.getImage()));
+            
             paletteTileBox.add(newTile, x, y); //TODO: make PaletteTiles smaller
             x++;
             
@@ -142,7 +170,13 @@ public class MapMakerUI extends Application
             }
         }
         
-        //set currentTab's content to be the VBox of PaletteTiles
-        currentTab.setContent(paletteTileBox);
+        //set currentTab's content to be the GridPane of PaletteTiles
+        scroll.setContent(paletteTileBox);
+        currentTab.setContent(scroll);
+    }
+    
+    void SetActiveTileImage(Image newImage)
+    {
+        this.activeTileImage = newImage;
     }
 }

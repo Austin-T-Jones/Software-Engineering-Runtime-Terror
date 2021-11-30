@@ -3,7 +3,6 @@ import javafx.geometry.Insets;
 
 //add image support
 import javafx.scene.image.*;
-
 /**
  * Tile class; superclass for MapGridTile and PaletteTile classes
  */
