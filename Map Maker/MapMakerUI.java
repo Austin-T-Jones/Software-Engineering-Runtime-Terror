@@ -145,6 +145,9 @@ public class MapMakerUI extends Application
         File imageDirectory = new File(folderName);
         File images[] = imageDirectory.listFiles();
         
+        //**sort() method to sort images based on file name**
+        
+        
         //starting coordinates for tiles in GridPane
         int x = 0; 
         int y = 0;
