@@ -24,7 +24,6 @@ public class PaletteTile extends Tile
      */
     public Image getImage()
     {
-        //System.out.println("getImage() was run.");
         return currentImage;
     }
 }

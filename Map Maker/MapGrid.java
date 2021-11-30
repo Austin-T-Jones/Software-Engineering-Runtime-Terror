@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class MapGrid extends GridPane
 {
     //default blank image
-    Image defaultImage = new Image("Tiles/_EraseTile.png");
+    Image defaultImage = new Image("Tiles/!EraseTile.png");
     
     //array storing all MapGridTiles
     ArrayList<MapGridTile> allMapTiles = new ArrayList<MapGridTile>();

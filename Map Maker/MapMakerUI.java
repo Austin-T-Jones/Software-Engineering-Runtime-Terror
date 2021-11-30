@@ -29,7 +29,7 @@ import javafx.event.ActionEvent;
 public class MapMakerUI extends Application
 {
     //variables
-    Image activeTileImage = new Image("Tiles/_EraseTile.png");
+    Image activeTileImage = new Image("Tiles/!EraseTile.png");
     
     public static void main(String[] args) 
     {
@@ -147,6 +147,7 @@ public class MapMakerUI extends Application
         for(int i = 0; i < images.length; i++)
         {
             String currentImageName = images[i].getName();
+            System.out.println(currentImageName);
             Image newImage = new Image(folderName + "/" + currentImageName);
             PaletteTile newTile = new PaletteTile(newImage);
             
@@ -171,6 +172,5 @@ public class MapMakerUI extends Application
     void SetActiveTileImage(Image newImage)
     {
         this.activeTileImage = newImage;
-        System.out.println("active image changed");
     }
 }
