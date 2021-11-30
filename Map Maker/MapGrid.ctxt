@@ -2,4 +2,6 @@
 comment0.target=MapGrid
 comment1.params=rowNum\ colNum
 comment1.target=MapGrid(int,\ int)
-numComments=2
+comment2.params=
+comment2.target=java.util.ArrayList\ getAllMapTiles()
+numComments=3

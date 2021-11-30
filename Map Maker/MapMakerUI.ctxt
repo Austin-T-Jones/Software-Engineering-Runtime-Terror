@@ -7,4 +7,6 @@ comment2.params=mainStage
 comment2.target=void\ start(javafx.stage.Stage)
 comment3.params=currentTab
 comment3.target=void\ CreatePalette(javafx.scene.control.Tab)
-numComments=4
+comment4.params=newImage
+comment4.target=void\ SetActiveTileImage(javafx.scene.image.Image)
+numComments=5

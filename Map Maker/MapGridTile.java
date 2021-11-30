@@ -1,6 +1,9 @@
 //add image support
 import javafx.scene.image.*;
 
+//for button presses
+//import javafx.event.ActionEvent;
+
 /**
  * MapGridTile: subclass of Tile class
  */
@@ -12,6 +15,7 @@ public class MapGridTile extends Tile
     public MapGridTile(Image defaultMapGridImage)
     {
         super(defaultMapGridImage);
+        //this.setOnAction((ActionEvent event) -> setImage());
     }
 
     /**
@@ -20,5 +24,7 @@ public class MapGridTile extends Tile
     public void setImage(Image newImage)
     {
         currentImage = newImage;
+        ImageView imageView = new ImageView(currentImage);
+        this.setGraphic(imageView);
     }
 }

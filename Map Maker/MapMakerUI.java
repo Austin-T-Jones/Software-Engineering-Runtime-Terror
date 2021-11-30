@@ -20,11 +20,17 @@ import javafx.embed.swing.SwingFXUtils;
 //add image support
 import javafx.scene.image.*;
 
+//when Tiles are selected
+import javafx.event.ActionEvent;
+
 /**
  * User interface for the Map Maker program
  */
 public class MapMakerUI extends Application
 {
+    //variables
+    Image activeTileImage = new Image("Tiles/_EraseTile.png");
+    
     public static void main(String[] args) 
     {
         try
@@ -108,6 +114,11 @@ public class MapMakerUI extends Application
         //display MapGrid
         MapGrid mapGrid = new MapGrid(10, 4);
         root.setCenter(mapGrid);
+        //get list of all MapGridTiles in MapGrid and listen for their events
+        for(MapGridTile mapTile : mapGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+        }
         
         
         
@@ -139,6 +150,9 @@ public class MapMakerUI extends Application
             Image newImage = new Image(folderName + "/" + currentImageName);
             PaletteTile newTile = new PaletteTile(newImage);
             
+            //listen for when a PaletteTile is selected
+            newTile.setOnAction((ActionEvent event) -> SetActiveTileImage(newTile.getImage()));
+            
             paletteTileBox.add(newTile, x, y); //TODO: make PaletteTiles smaller
             x++;
             
@@ -150,7 +164,13 @@ public class MapMakerUI extends Application
             }
         }
         
-        //set currentTab's content to be the VBox of PaletteTiles
+        //set currentTab's content to be the GridPane of PaletteTiles
         currentTab.setContent(paletteTileBox);
+    }
+    
+    void SetActiveTileImage(Image newImage)
+    {
+        this.activeTileImage = newImage;
+        System.out.println("active image changed");
     }
 }
