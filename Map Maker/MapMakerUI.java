@@ -24,10 +24,6 @@ import javafx.scene.image.*;
 //when Tiles are selected
 import javafx.event.ActionEvent;
 
-
-// Test Comment
-
-
 /**
  * User interface for the Map Maker program
  */
@@ -35,7 +31,7 @@ public class MapMakerUI extends Application
 {
     //variables
     Image activeTileImage = new Image("Tiles/!EraseTile.png");
-    
+
     public static void main(String[] args) 
     {
         try
@@ -51,42 +47,45 @@ public class MapMakerUI extends Application
             System.exit(0);
         }
     }
-    
+
     public void start(Stage mainStage) 
     {
         mainStage.setTitle("Map Maker");
         mainStage.setMaximized(true);
-        
+
         //add application icon
-        //mainStage.getIcons().add(new Image("icons/color_wheel.png"));
-        
+        mainStage.getIcons().add(new Image("icons/color_wheel.png"));
+
         BorderPane root = new BorderPane();
 
         Scene mainScene = new Scene(root, 800, 800);
         mainStage.setScene(mainScene);
-        
+
         //load the stylesheet file
         mainScene.getStylesheets().add("stylesheet.css");
-        
+
         //add MenuBar at the top of the screen
         MenuBar bar = new MenuBar();
         root.setTop(bar);
         Menu fileMenu = new Menu("File");
         Menu helpMenu = new Menu("Help");
-        
+
         //create MenuItems
         MenuItem newFile = new MenuItem("New Map...");
+        newFile.setGraphic(new ImageView(new Image("icons/page.png")));
         MenuItem openFile = new MenuItem("Open Map...");
+        openFile.setGraphic(new ImageView(new Image("icons/folder.png")));
         MenuItem saveFile = new MenuItem("Save Map...");
+        saveFile.setGraphic(new ImageView(new Image("icons/disk.png")));
         //TODO: add more help menus regarding different parts of the program
         MenuItem aboutProgram = new MenuItem("About this program...");
-        
+        aboutProgram.setGraphic(new ImageView(new Image("icons/information.png")));
+
         //add MenuItems to Menus
         fileMenu.getItems().addAll(newFile, openFile, saveFile);
         helpMenu.getItems().add(aboutProgram);
         bar.getMenus().addAll(fileMenu, helpMenu);
-        
-        
+
         //add Tile Palette and Layers windows to left side of screen
         VBox vbox = new VBox();
         //have these windows take up 15% of the screen size
@@ -94,7 +93,55 @@ public class MapMakerUI extends Application
         root.setLeft(vbox);
         Label tilePaletteLabel = new Label("Tile Palettes"); //TODO: improve labels
         Label layerLabel = new Label("Layers");
+
+        //aboutProgram funcitonality
+        aboutProgram.setOnAction(
+            (ActionEvent event) ->
+            {
+                Alert infoAlert = new Alert(AlertType.INFORMATION);
+                infoAlert.setTitle("About");
+                infoAlert.setHeaderText("Have questions?");
+                infoAlert.setContentText("Select a tile on the left side and click anywhere on the canvas to make your map!");
+                infoAlert.setGraphic(new ImageView(new Image("icons/help.png")));
+                Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image("icons/information.png"));
+                infoAlert.showAndWait();
+            }
+        );
         
+        //saveFile funcitonality
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        saveFile.setOnAction(
+            (ActionEvent e) ->
+            {
+                FileChooser chooser = new FileChooser();
+                ExtensionFilter filter = new ExtensionFilter("Image Files" , ".png");
+                chooser.getExtensionFilters().add(filter);
+                File imageFile = chooser.showSaveDialog(mainStage);
+                if (imageFile == null)
+                {
+                    Alert infoAlert = new Alert(AlertType.WARNING);
+                    infoAlert.setTitle("Warning");
+                    infoAlert.setHeaderText(null);
+                    infoAlert.setContentText("No directory selected");
+                    infoAlert.setGraphic(new ImageView(new Image("icons/note.png")));
+                    Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image("icons/information.png"));
+                    infoAlert.showAndWait();
+                }
+                try
+                {
+                    Image image = root.snapshot(null, null);
+                    BufferedImage buffImage = SwingFXUtils.fromFXImage(image,null);
+                    ImageIO.write(buffImage, "png", imageFile);
+                }
+                catch (Exception error)
+                {
+                    error.printStackTrace();
+                }
+            }
+            );
+
         //tabs for Tile Palette
         TabPane tilePaletteTabs = new TabPane();
         tilePaletteTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -104,7 +151,7 @@ public class MapMakerUI extends Application
         Tab paletteC = new Tab("C");
         Tab paletteD = new Tab("D");
         tilePaletteTabs.getTabs().addAll(paletteA, paletteB, paletteC, paletteD);
-        
+
         //buttons for Layers
         VBox layerButtons = new VBox();
         Button groundTab = new Button("Ground");
@@ -112,10 +159,9 @@ public class MapMakerUI extends Application
         Button decorTab = new Button("Decor");
         Button gmTab = new Button("GM");
         layerButtons.getChildren().addAll(groundTab, wallsTab, decorTab, gmTab);
-        
+
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
-        
-        
+
         //display MapGrid
         MapGrid mapGrid = new MapGrid(10, 10);
         root.setCenter(mapGrid);
@@ -124,47 +170,44 @@ public class MapMakerUI extends Application
         {
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
         }
-        
-        
+
         
         //TODO: get user input for map size
-        
-        
+
         
         mainStage.show();
     }
-    
+
     void CreatePalette(Tab currentTab)
     {
         //create a GridPane that will store all the PaletteTiles
         ScrollPane scroll = new ScrollPane();
         GridPane paletteTileBox = new GridPane();
-        
+
         //create array of Images pulled from Tiles folder
         String folderName = "Tiles";
         File imageDirectory = new File(folderName);
         File images[] = imageDirectory.listFiles();
-        
+
         //**sort() method to sort images based on file name**
-        
-        
+
         //starting coordinates for tiles in GridPane
         int x = 0; 
         int y = 0;
-        
+
         //for loop that fills the VBox with PaletteTiles for each image
         for(int i = 0; i < images.length; i++)
         {
             String currentImageName = images[i].getName();
             Image newImage = new Image(folderName + "/" + currentImageName);
             PaletteTile newTile = new PaletteTile(newImage);
-            
+
             //listen for when a PaletteTile is selected
             newTile.setOnAction((ActionEvent event) -> SetActiveTileImage(newTile.getImage()));
-            
+
             paletteTileBox.add(newTile, x, y); //TODO: make PaletteTiles smaller
             x++;
-            
+
             //find coordinates for new tile
             if (x > 3)
             {
@@ -172,12 +215,12 @@ public class MapMakerUI extends Application
                 y++;
             }
         }
-        
+
         //set currentTab's content to be the GridPane of PaletteTiles
         scroll.setContent(paletteTileBox);
         currentTab.setContent(scroll);
     }
-    
+
     void SetActiveTileImage(Image newImage)
     {
         this.activeTileImage = newImage;
