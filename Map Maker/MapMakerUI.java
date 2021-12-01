@@ -94,6 +94,11 @@ public class MapMakerUI extends Application
         Label tilePaletteLabel = new Label("Tile Palettes"); //TODO: improve labels
         Label layerLabel = new Label("Layers");
 
+        //sets mouse to display current selected tile
+        Image cursorImage = new Image("Tiles/rpgTile000.png");
+        ImageCursor customCursor = new ImageCursor(cursorImage, 50, 50);
+        mainScene.setCursor(customCursor);
+
         //aboutProgram funcitonality
         aboutProgram.setOnAction(
             (ActionEvent event) ->
@@ -108,7 +113,17 @@ public class MapMakerUI extends Application
                 infoAlert.showAndWait();
             }
         );
-        
+
+        //newFile funcitonality
+        // TODO: needs to be improved so the grid will properly read user input
+        newFile.setOnAction(
+            (ActionEvent event) ->
+            {
+                MapGrid mapGrid = new MapGrid(10, 10);
+                root.setCenter(mapGrid);
+            }
+        );
+
         //saveFile funcitonality
         DirectoryChooser dirChooser = new DirectoryChooser();
         saveFile.setOnAction(
@@ -140,15 +155,17 @@ public class MapMakerUI extends Application
                     error.printStackTrace();
                 }
             }
-            );
+        );
 
         //tabs for Tile Palette
         TabPane tilePaletteTabs = new TabPane();
         tilePaletteTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         Tab paletteA = new Tab("A");
-        CreatePalette(paletteA);
+        CreatePalette(paletteA, "Nature");
         Tab paletteB = new Tab("B");
+        CreatePalette(paletteB, "Indoors");
         Tab paletteC = new Tab("C");
+        CreatePalette(paletteC, "Decorative");
         Tab paletteD = new Tab("D");
         tilePaletteTabs.getTabs().addAll(paletteA, paletteB, paletteC, paletteD);
 
@@ -171,21 +188,19 @@ public class MapMakerUI extends Application
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
         }
 
-        
         //TODO: get user input for map size
 
         
         mainStage.show();
     }
 
-    void CreatePalette(Tab currentTab)
+    void CreatePalette(Tab currentTab, String folderName)
     {
         //create a GridPane that will store all the PaletteTiles
         ScrollPane scroll = new ScrollPane();
         GridPane paletteTileBox = new GridPane();
 
         //create array of Images pulled from Tiles folder
-        String folderName = "Tiles";
         File imageDirectory = new File(folderName);
         File images[] = imageDirectory.listFiles();
 
