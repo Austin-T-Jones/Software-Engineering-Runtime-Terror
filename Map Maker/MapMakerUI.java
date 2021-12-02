@@ -94,69 +94,6 @@ public class MapMakerUI extends Application
         Label tilePaletteLabel = new Label("Tile Palettes"); //TODO: improve labels
         Label layerLabel = new Label("Layers");
 
-        //sets mouse to display current selected tile
-        // TODO: have cursor change depending on tile selected
-        Image cursorImage = new Image("Tiles/rpgTile000.png");
-
-        //aboutProgram funcitonality
-        aboutProgram.setOnAction(
-            (ActionEvent event) ->
-            {
-                Alert infoAlert = new Alert(AlertType.INFORMATION);
-                infoAlert.setTitle("About");
-                infoAlert.setHeaderText("Have questions?");
-                infoAlert.setContentText("Select a tile on the left side and click anywhere on the canvas to make your map!");
-                infoAlert.setGraphic(new ImageView(new Image("icons/help.png")));
-                Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image("icons/information.png"));
-                infoAlert.showAndWait();
-            }
-        );
-
-        //newFile funcitonality
-        // TODO: needs to be improved so the grid will properly read user input
-        newFile.setOnAction(
-            (ActionEvent event) ->
-            {
-                MapGrid mapGrid = new MapGrid(10, 10);
-                root.setCenter(mapGrid);
-            }
-        );
-
-        //saveFile funcitonality
-        DirectoryChooser dirChooser = new DirectoryChooser();
-        saveFile.setOnAction(
-            (ActionEvent e) ->
-            {
-                FileChooser chooser = new FileChooser();
-                ExtensionFilter filter = new ExtensionFilter("Image Files" , ".png");
-                chooser.getExtensionFilters().add(filter);
-                File imageFile = chooser.showSaveDialog(mainStage);
-                if (imageFile == null)
-                {
-                    Alert infoAlert = new Alert(AlertType.WARNING);
-                    infoAlert.setTitle("Warning");
-                    infoAlert.setHeaderText(null);
-                    infoAlert.setContentText("No directory selected");
-                    infoAlert.setGraphic(new ImageView(new Image("icons/note.png")));
-                    Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
-                    alertStage.getIcons().add(new Image("icons/information.png"));
-                    infoAlert.showAndWait();
-                    return;
-                }
-                try
-                {
-                    Image image = root.snapshot(null, null);
-                    BufferedImage buffImage = SwingFXUtils.fromFXImage(image,null);
-                    ImageIO.write(buffImage, "png", imageFile);
-                }
-                catch (Exception error)
-                {
-                    error.printStackTrace();
-                }
-            }
-        );
-
         //tabs for Tile Palette
         TabPane tilePaletteTabs = new TabPane();
         tilePaletteTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
@@ -191,7 +128,65 @@ public class MapMakerUI extends Application
 
         //TODO: get user input for map size
 
-        
+        //aboutProgram funcitonality
+        aboutProgram.setOnAction(
+            (ActionEvent event) ->
+            {
+                Alert infoAlert = new Alert(AlertType.INFORMATION);
+                infoAlert.setTitle("About");
+                infoAlert.setHeaderText("Have questions?");
+                infoAlert.setContentText("Select a tile on the left side and click anywhere on the canvas to make your map!");
+                infoAlert.setGraphic(new ImageView(new Image("icons/help.png")));
+                Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image("icons/information.png"));
+                infoAlert.showAndWait();
+            }
+        );
+
+        //newFile funcitonality
+        // TODO: needs to be improved so the grid will properly read user input
+        newFile.setOnAction(
+            (ActionEvent event) ->
+            {
+                //mapGrid = new MapGrid(10, 10);
+                //root.setCenter(mapGrid);
+            }
+        );
+
+        //saveFile funcitonality
+        DirectoryChooser dirChooser = new DirectoryChooser();
+        saveFile.setOnAction(
+            (ActionEvent e) ->
+            {
+                FileChooser chooser = new FileChooser();
+                ExtensionFilter filter = new ExtensionFilter("Image Files" , ".png");
+                chooser.getExtensionFilters().add(filter);
+                File imageFile = chooser.showSaveDialog(mainStage);
+                if (imageFile == null)
+                {
+                    Alert infoAlert = new Alert(AlertType.WARNING);
+                    infoAlert.setTitle("Warning");
+                    infoAlert.setHeaderText(null);
+                    infoAlert.setContentText("No directory selected");
+                    infoAlert.setGraphic(new ImageView(new Image("icons/note.png")));
+                    Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image("icons/information.png"));
+                    infoAlert.showAndWait();
+                    return;
+                }
+                try
+                {
+                    Image image = mapGrid.snapshot(null, null);
+                    BufferedImage buffImage = SwingFXUtils.fromFXImage(image,null);
+                    ImageIO.write(buffImage, "png", imageFile);
+                }
+                catch (Exception error)
+                {
+                    error.printStackTrace();
+                }
+            }
+        );
+
         mainStage.show();
     }
 
@@ -207,7 +202,7 @@ public class MapMakerUI extends Application
 
         //sort images based on file name by ASCENDING ORDER
         Arrays.sort(images);
-        
+
         //starting coordinates for tiles in GridPane
         int x = 0; 
         int y = 0;
