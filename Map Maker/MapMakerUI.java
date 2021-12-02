@@ -95,8 +95,10 @@ public class MapMakerUI extends Application
         Label layerLabel = new Label("Layers");
 
         //sets mouse to display current selected tile
+        // TODO: have cursor change depending on tile selected
         Image cursorImage = new Image("Tiles/rpgTile000.png");
-        ImageCursor customCursor = new ImageCursor(cursorImage, 50, 50);
+        
+        ImageCursor customCursor = new ImageCursor(cursorImage, 0, 0);
         mainScene.setCursor(customCursor);
 
         //aboutProgram funcitonality
@@ -143,6 +145,7 @@ public class MapMakerUI extends Application
                     Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
                     alertStage.getIcons().add(new Image("icons/information.png"));
                     infoAlert.showAndWait();
+                    return;
                 }
                 try
                 {
@@ -160,13 +163,14 @@ public class MapMakerUI extends Application
         //tabs for Tile Palette
         TabPane tilePaletteTabs = new TabPane();
         tilePaletteTabs.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        Tab paletteA = new Tab("A");
+        Tab paletteA = new Tab("Nature");
         CreatePalette(paletteA, "Nature");
-        Tab paletteB = new Tab("B");
+        Tab paletteB = new Tab("Indoors");
         CreatePalette(paletteB, "Indoors");
-        Tab paletteC = new Tab("C");
+        Tab paletteC = new Tab("Decorative");
         CreatePalette(paletteC, "Decorative");
-        Tab paletteD = new Tab("D");
+        Tab paletteD = new Tab("Misc.");
+        CreatePalette(paletteD, "Decorative");
         tilePaletteTabs.getTabs().addAll(paletteA, paletteB, paletteC, paletteD);
 
         //buttons for Layers
