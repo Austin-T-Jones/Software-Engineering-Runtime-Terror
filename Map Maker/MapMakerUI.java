@@ -97,9 +97,6 @@ public class MapMakerUI extends Application
         //sets mouse to display current selected tile
         // TODO: have cursor change depending on tile selected
         Image cursorImage = new Image("Tiles/rpgTile000.png");
-        
-        ImageCursor customCursor = new ImageCursor(cursorImage, 0, 0);
-        mainScene.setCursor(customCursor);
 
         //aboutProgram funcitonality
         aboutProgram.setOnAction(
