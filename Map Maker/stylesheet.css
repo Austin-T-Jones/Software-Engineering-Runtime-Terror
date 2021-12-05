@@ -1,6 +1,6 @@
 .root
 {
-	
+    
 }
 
 .label
@@ -8,12 +8,23 @@
 	
 }
 
+.tile
+{
+    
+}
+
 .palette-tile
 {
-	
+    -fx-border-color: gray;
+    -fx-background-color: transparent;
 }
 
 .palette-tile:hover
 {
 	
+}
+
+.button
+{
+    
 }
