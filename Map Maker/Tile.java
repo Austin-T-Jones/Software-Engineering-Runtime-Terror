@@ -18,6 +18,7 @@ public class Tile extends Button
     {
         super();
         
+        this.getStyleClass().add("palette-tile");
         this.setPadding(Insets.EMPTY);
         this.currentImage = defaultImage;
         ImageView imageView = new ImageView(currentImage);

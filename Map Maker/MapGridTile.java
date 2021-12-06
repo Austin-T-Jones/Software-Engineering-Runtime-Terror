@@ -15,7 +15,6 @@ public class MapGridTile extends Tile
     public MapGridTile(Image defaultMapGridImage)
     {
         super(defaultMapGridImage);
-        //this.setOnAction((ActionEvent event) -> setImage());
     }
 
     /**
