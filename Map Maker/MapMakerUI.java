@@ -34,6 +34,7 @@ public class MapMakerUI extends Application
 {
     //variables
     Image activeTileImage = new Image("Tiles/!EraseTile.png");
+    MapGrid activeMapGrid;
 
     public static void main(String[] args) 
     {
@@ -112,52 +113,27 @@ public class MapMakerUI extends Application
 
         //buttons for Layers
         VBox layerButtons = new VBox();
-        Button groundTab = new Button("Ground");
-        Button wallsTab = new Button("Walls");
-        Button decorTab = new Button("Decor");
-        Button gmTab = new Button("GM");
-        layerButtons.getChildren().addAll(groundTab, wallsTab, decorTab, gmTab);
+        Button groundButton = new Button("Ground");
+        Button wallsButton = new Button("Walls");
+        Button decorButton = new Button("Decor");
+        Button gmButton = new Button("GM");
+        layerButtons.getChildren().addAll(groundButton, wallsButton, decorButton, gmButton);
 
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
 
-        //create & display MapGrid layers 
+        //create & display MapGrid layers //TODO: get user input for map size
         MapGrid groundGrid = new MapGrid(10, 10);
         MapGrid wallGrid = new MapGrid(10, 10);
         MapGrid decorGrid = new MapGrid(10,10);
         MapGrid gmGrid = new MapGrid(10,10);
         root.setCenter(groundGrid);
 
-        groundTab.setOnAction(new EventHandler<ActionEvent>() 
-            {
-                @Override public void handle(ActionEvent e) 
-                {
-                    root.setCenter(groundGrid);
-                }
-            });
-
-        wallsTab.setOnAction(new EventHandler<ActionEvent>() 
-            {
-                @Override public void handle(ActionEvent e) 
-                {
-                    root.setCenter(wallGrid);
-                }
-            });
-            
-        decorTab.setOnAction(new EventHandler<ActionEvent>() 
-            {
-                @Override public void handle(ActionEvent e) 
-                {
-                    root.setCenter(decorGrid);
-                }
-            });
-            
-        gmTab.setOnAction(new EventHandler<ActionEvent>() 
-            {
-                @Override public void handle(ActionEvent e) 
-                {
-                    root.setCenter(gmGrid);
-                }
-            });
+        //layer button events; change active layer when relevant button is pressed
+        groundButton.setOnAction((ActionEvent event) -> activeMapGrid = groundGrid);
+        wallsButton.setOnAction((ActionEvent event) -> activeMapGrid = wallGrid);            
+        decorButton.setOnAction((ActionEvent event) -> activeMapGrid = decorGrid);            
+        gmButton.setOnAction((ActionEvent event) -> activeMapGrid = gmGrid);
+        
         //get list of all MapGridTiles in MapGrid and listen for their events
         for(MapGridTile mapTile : groundGrid.getAllMapTiles())
         {
@@ -178,7 +154,6 @@ public class MapMakerUI extends Application
         {
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
         }
-        //TODO: get user input for map size
         
         
         //aboutProgram funcitonality

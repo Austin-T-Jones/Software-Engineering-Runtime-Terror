@@ -1,20 +1,12 @@
 #BlueJ class context
 comment0.target=MapMakerUI
-comment0.text=\n\ User\ interface\ for\ the\ Map\ Maker\ program\n
+comment0.text=\r\n\ User\ interface\ for\ the\ Map\ Maker\ program\r\n
 comment1.params=args
 comment1.target=void\ main(java.lang.String[])
 comment2.params=mainStage
 comment2.target=void\ start(javafx.stage.Stage)
-comment3.params=e
-comment3.target=void\ handle(javafx.event.ActionEvent)
-comment4.params=e
-comment4.target=void\ handle(javafx.event.ActionEvent)
-comment5.params=e
-comment5.target=void\ handle(javafx.event.ActionEvent)
-comment6.params=e
-comment6.target=void\ handle(javafx.event.ActionEvent)
-comment7.params=currentTab\ folderName
-comment7.target=void\ CreatePalette(javafx.scene.control.Tab,\ java.lang.String)
-comment8.params=newImage
-comment8.target=void\ SetActiveTileImage(javafx.scene.image.Image)
-numComments=9
+comment3.params=currentTab\ folderName
+comment3.target=void\ CreatePalette(javafx.scene.control.Tab,\ java.lang.String)
+comment4.params=newImage
+comment4.target=void\ SetActiveTileImage(javafx.scene.image.Image)
+numComments=5
