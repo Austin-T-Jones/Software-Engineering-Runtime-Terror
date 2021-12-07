@@ -34,7 +34,6 @@ public class MapMakerUI extends Application
 {
     //variables
     Image activeTileImage = new Image("Tiles/!EraseTile.png");
-    MapGrid activeMapGrid;
 
     public static void main(String[] args) 
     {
@@ -126,30 +125,59 @@ public class MapMakerUI extends Application
         MapGrid wallGrid = new MapGrid(10, 10);
         MapGrid decorGrid = new MapGrid(10,10);
         MapGrid gmGrid = new MapGrid(10,10);
-        root.setCenter(groundGrid);
+        //create StackPane for layers
+        StackPane stackPane = new StackPane();
+        stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid, gmGrid);
+        root.setCenter(stackPane);
+        //ground layer is active by default
+        wallGrid.setMouseTransparent(true);
+        decorGrid.setMouseTransparent(true);
+        gmGrid.setMouseTransparent(true);
 
-        //layer button events; change active layer when relevant button is pressed
-        groundButton.setOnAction((ActionEvent event) -> activeMapGrid = groundGrid);
-        wallsButton.setOnAction((ActionEvent event) -> activeMapGrid = wallGrid);            
-        decorButton.setOnAction((ActionEvent event) -> activeMapGrid = decorGrid);            
-        gmButton.setOnAction((ActionEvent event) -> activeMapGrid = gmGrid);
+        //layer button events; change active layer and disable interaction with other
+        //layers when relevant button is pressed
+        groundButton.setOnAction((ActionEvent event) -> 
+        {
+            groundGrid.setMouseTransparent(false);
+            wallGrid.setMouseTransparent(true);
+            decorGrid.setMouseTransparent(true);
+            gmGrid.setMouseTransparent(true);
+        });
+        wallsButton.setOnAction((ActionEvent event) -> 
+        {
+            groundGrid.setMouseTransparent(true);
+            wallGrid.setMouseTransparent(false);
+            decorGrid.setMouseTransparent(true);
+            gmGrid.setMouseTransparent(true);
+        });            
+        decorButton.setOnAction((ActionEvent event) -> 
+        {
+            groundGrid.setMouseTransparent(true);
+            wallGrid.setMouseTransparent(true);
+            decorGrid.setMouseTransparent(false);
+            gmGrid.setMouseTransparent(true);
+        });            
+        gmButton.setOnAction((ActionEvent event) -> 
+        {
+            groundGrid.setMouseTransparent(true);
+            wallGrid.setMouseTransparent(true);
+            decorGrid.setMouseTransparent(true);
+            gmGrid.setMouseTransparent(false);
+        });
         
         //get list of all MapGridTiles in MapGrid and listen for their events
         for(MapGridTile mapTile : groundGrid.getAllMapTiles())
         {
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
         }
-
         for(MapGridTile mapTile : wallGrid.getAllMapTiles())
         {
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-        }
-       
+        }       
         for(MapGridTile mapTile : decorGrid.getAllMapTiles())
         {
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-        }
-        
+        }        
         for(MapGridTile mapTile : gmGrid.getAllMapTiles())
         {
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
@@ -181,7 +209,7 @@ public class MapMakerUI extends Application
             }
         );
 
-        //saveFile funcitonality **NEED TO FIX TO SAVE ALL LAYERS**
+        //saveFile functionality
         DirectoryChooser dirChooser = new DirectoryChooser();
         saveFile.setOnAction(
             (ActionEvent e) ->
@@ -204,7 +232,7 @@ public class MapMakerUI extends Application
                 }
                 try
                 {
-                    Image image = groundGrid.snapshot(null, null);
+                    Image image = stackPane.snapshot(null, null);
                     BufferedImage buffImage = SwingFXUtils.fromFXImage(image,null);
                     ImageIO.write(buffImage, "png", imageFile);
                 }
