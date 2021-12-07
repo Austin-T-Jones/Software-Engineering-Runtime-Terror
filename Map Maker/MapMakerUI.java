@@ -11,7 +11,8 @@ import java.util.*;            // List, Scanner, Optional, ...
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.ScrollPane;
-
+import javafx.collections.FXCollections;
+import javax.swing.event.*;
 //new imports to work with images
 import javafx.scene.image.Image;
 import java.awt.image.BufferedImage;
@@ -23,7 +24,9 @@ import javafx.scene.image.*;
 
 //when Tiles are selected
 import javafx.event.ActionEvent;
-
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCode;
 /**
  * User interface for the Map Maker program
  */
@@ -117,17 +120,67 @@ public class MapMakerUI extends Application
 
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
 
-        //display MapGrid
-        MapGrid mapGrid = new MapGrid(10, 10);
-        root.setCenter(mapGrid);
+        //create & display MapGrid layers 
+        MapGrid groundGrid = new MapGrid(10, 10);
+        MapGrid wallGrid = new MapGrid(10, 10);
+        MapGrid decorGrid = new MapGrid(10,10);
+        MapGrid gmGrid = new MapGrid(10,10);
+        root.setCenter(groundGrid);
+
+        groundTab.setOnAction(new EventHandler<ActionEvent>() 
+            {
+                @Override public void handle(ActionEvent e) 
+                {
+                    root.setCenter(groundGrid);
+                }
+            });
+
+        wallsTab.setOnAction(new EventHandler<ActionEvent>() 
+            {
+                @Override public void handle(ActionEvent e) 
+                {
+                    root.setCenter(wallGrid);
+                }
+            });
+            
+        decorTab.setOnAction(new EventHandler<ActionEvent>() 
+            {
+                @Override public void handle(ActionEvent e) 
+                {
+                    root.setCenter(decorGrid);
+                }
+            });
+            
+        gmTab.setOnAction(new EventHandler<ActionEvent>() 
+            {
+                @Override public void handle(ActionEvent e) 
+                {
+                    root.setCenter(gmGrid);
+                }
+            });
         //get list of all MapGridTiles in MapGrid and listen for their events
-        for(MapGridTile mapTile : mapGrid.getAllMapTiles())
+        for(MapGridTile mapTile : groundGrid.getAllMapTiles())
         {
             mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
         }
 
+        for(MapGridTile mapTile : wallGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+        }
+       
+        for(MapGridTile mapTile : decorGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+        }
+        
+        for(MapGridTile mapTile : gmGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+        }
         //TODO: get user input for map size
-
+        
+        
         //aboutProgram funcitonality
         aboutProgram.setOnAction(
             (ActionEvent event) ->
@@ -153,7 +206,7 @@ public class MapMakerUI extends Application
             }
         );
 
-        //saveFile funcitonality
+        //saveFile funcitonality **NEED TO FIX TO SAVE ALL LAYERS**
         DirectoryChooser dirChooser = new DirectoryChooser();
         saveFile.setOnAction(
             (ActionEvent e) ->
@@ -176,7 +229,7 @@ public class MapMakerUI extends Application
                 }
                 try
                 {
-                    Image image = mapGrid.snapshot(null, null);
+                    Image image = groundGrid.snapshot(null, null);
                     BufferedImage buffImage = SwingFXUtils.fromFXImage(image,null);
                     ImageIO.write(buffImage, "png", imageFile);
                 }
