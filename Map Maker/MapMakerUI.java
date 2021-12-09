@@ -13,6 +13,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.scene.control.ScrollPane;
 import javafx.collections.FXCollections;
 import javax.swing.event.*;
+import javafx.util.Pair;
+import javafx.scene.control.ButtonBar.ButtonData;
 //new imports to work with images
 import javafx.scene.image.Image;
 import java.awt.image.BufferedImage;
@@ -89,6 +91,32 @@ public class MapMakerUI extends Application
         helpMenu.getItems().add(aboutProgram);
         bar.getMenus().addAll(fileMenu, helpMenu);
 
+        //dialog box for custom map size
+        Dialog<Pair<String, String>> mapDialog = new Dialog<>();
+        mapDialog.setTitle("MapMaker");
+        mapDialog.setHeaderText(" Set Custom Map Size : ");
+
+        ButtonType mapSizeBtnType = new ButtonType("Create Map", ButtonData.OK_DONE);
+        mapDialog.getDialogPane().getButtonTypes().addAll(mapSizeBtnType);
+
+        GridPane mapSizeGrid = new GridPane();
+        mapSizeGrid.setHgap(10);
+        mapSizeGrid.setVgap(10);
+        mapSizeGrid.setPadding(new Insets(20,150,10,10));
+
+        TextField mapWidth = new TextField();
+        mapWidth.setPromptText("Width"); 
+
+        TextField mapHeight = new TextField();
+        mapHeight.setPromptText("Height"); 
+
+        mapSizeGrid.add(new Label("Enter Width : "), 0, 0);
+        mapSizeGrid.add(mapWidth, 1, 0);
+        mapSizeGrid.add(new Label("Enter Height : "), 0, 1);
+        mapSizeGrid.add(mapHeight, 1, 1);
+        mapDialog.getDialogPane().setContent(mapSizeGrid);
+        Optional<Pair<String, String>> result = mapDialog.showAndWait();
+
         //add Tile Palette and Layers windows to left side of screen
         VBox vbox = new VBox();
         //have these windows take up 15% of the screen size
@@ -112,78 +140,91 @@ public class MapMakerUI extends Application
 
         //buttons for Layers
         VBox layerButtons = new VBox();
-        Button groundButton = new Button("Ground");
-        Button wallsButton = new Button("Walls");
-        Button decorButton = new Button("Decor");
-        Button gmButton = new Button("GM");
+        Button groundButton = new Button("Ground Layer");
+        Button wallsButton = new Button("Wall Layer");
+        Button decorButton = new Button("Decor Layer");
+        Button gmButton = new Button("GM Layer");
         layerButtons.getChildren().addAll(groundButton, wallsButton, decorButton, gmButton);
 
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
 
-        //create & display MapGrid layers //TODO: get user input for map size
-        MapGrid groundGrid = new MapGrid(10, 10);
-        MapGrid wallGrid = new MapGrid(10, 10);
-        MapGrid decorGrid = new MapGrid(10,10);
-        MapGrid gmGrid = new MapGrid(10,10);
-        //create StackPane for layers
+        //get user input for map size & create & display MapGrid layers 
+        //when user clicks create map, take data from textfields and create a map with input
         StackPane stackPane = new StackPane();
-        stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid, gmGrid);
-        root.setCenter(stackPane);
-        //ground layer is active by default
-        wallGrid.setMouseTransparent(true);
-        decorGrid.setMouseTransparent(true);
-        gmGrid.setMouseTransparent(true);
+        if(result.isPresent())
+        {
+            //retrieve data from textfields
+            String textWidth = mapWidth.getText();
+            String textHeight = mapHeight.getText();
 
-        //layer button events; change active layer and disable interaction with other
-        //layers when relevant button is pressed
-        groundButton.setOnAction((ActionEvent event) -> 
-        {
-            groundGrid.setMouseTransparent(false);
+            //read only integers from textfields and store in integer 
+            int numWidth = Integer.parseInt(textWidth);
+            int numHeight = Integer.parseInt(textHeight);
+
+            //initialize mapgrids using data from the textfields
+            MapGrid groundGrid = new MapGrid(numWidth, numHeight);
+            MapGrid wallGrid = new MapGrid(numWidth, numHeight);
+            MapGrid decorGrid = new MapGrid(numWidth,numHeight);
+            MapGrid gmGrid = new MapGrid(numWidth,numHeight);
+
+            //create StackPane for layers
+            stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid, gmGrid);
+            root.setCenter(stackPane);
+            //ground layer is active by default
             wallGrid.setMouseTransparent(true);
             decorGrid.setMouseTransparent(true);
             gmGrid.setMouseTransparent(true);
-        });
-        wallsButton.setOnAction((ActionEvent event) -> 
-        {
-            groundGrid.setMouseTransparent(true);
-            wallGrid.setMouseTransparent(false);
-            decorGrid.setMouseTransparent(true);
-            gmGrid.setMouseTransparent(true);
-        });            
-        decorButton.setOnAction((ActionEvent event) -> 
-        {
-            groundGrid.setMouseTransparent(true);
-            wallGrid.setMouseTransparent(true);
-            decorGrid.setMouseTransparent(false);
-            gmGrid.setMouseTransparent(true);
-        });            
-        gmButton.setOnAction((ActionEvent event) -> 
-        {
-            groundGrid.setMouseTransparent(true);
-            wallGrid.setMouseTransparent(true);
-            decorGrid.setMouseTransparent(true);
-            gmGrid.setMouseTransparent(false);
-        });
-        
-        //get list of all MapGridTiles in MapGrid and listen for their events
-        for(MapGridTile mapTile : groundGrid.getAllMapTiles())
-        {
-            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+
+            //layer button events; change active layer and disable interaction with other
+            //layers when relevant button is pressed
+            groundButton.setOnAction((ActionEvent event) -> 
+                {
+                    groundGrid.setMouseTransparent(false);
+                    wallGrid.setMouseTransparent(true);
+                    decorGrid.setMouseTransparent(true);
+                    gmGrid.setMouseTransparent(true);
+                });
+            wallsButton.setOnAction((ActionEvent event) -> 
+                {
+                    groundGrid.setMouseTransparent(true);
+                    wallGrid.setMouseTransparent(false);
+                    decorGrid.setMouseTransparent(true);
+                    gmGrid.setMouseTransparent(true);
+                });            
+            decorButton.setOnAction((ActionEvent event) -> 
+                {
+                    groundGrid.setMouseTransparent(true);
+                    wallGrid.setMouseTransparent(true);
+                    decorGrid.setMouseTransparent(false);
+                    gmGrid.setMouseTransparent(true);
+                });            
+            gmButton.setOnAction((ActionEvent event) -> 
+                {
+                    groundGrid.setMouseTransparent(true);
+                    wallGrid.setMouseTransparent(true);
+                    decorGrid.setMouseTransparent(true);
+                    gmGrid.setMouseTransparent(false);
+                });
+
+            //get list of all MapGridTiles in MapGrid and listen for their events
+            for(MapGridTile mapTile : groundGrid.getAllMapTiles())
+            {
+                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+            }
+            for(MapGridTile mapTile : wallGrid.getAllMapTiles())
+            {
+                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+            }       
+            for(MapGridTile mapTile : decorGrid.getAllMapTiles())
+            {
+                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+            }        
+            for(MapGridTile mapTile : gmGrid.getAllMapTiles())
+            {
+                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+            }
+
         }
-        for(MapGridTile mapTile : wallGrid.getAllMapTiles())
-        {
-            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-        }       
-        for(MapGridTile mapTile : decorGrid.getAllMapTiles())
-        {
-            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-        }        
-        for(MapGridTile mapTile : gmGrid.getAllMapTiles())
-        {
-            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-        }
-        
-        
         //aboutProgram funcitonality
         aboutProgram.setOnAction(
             (ActionEvent event) ->
