@@ -14,16 +14,25 @@ dependency4.type=UsesDependency
 dependency5.from=MapMakerUI
 dependency5.to=PaletteTile
 dependency5.type=UsesDependency
-editor.fx.0.height=728
-editor.fx.0.width=800
-editor.fx.0.x=104
-editor.fx.0.y=105
+<<<<<<< HEAD
+editor.fx.0.height=0
+editor.fx.0.width=0
+editor.fx.0.x=0
+editor.fx.0.y=0
 objectbench.height=90
 objectbench.width=732
+=======
+editor.fx.0.height=1048
+editor.fx.0.width=1938
+editor.fx.0.x=-9
+editor.fx.0.y=-9
+objectbench.height=80
+objectbench.width=714
+>>>>>>> 2c8e66e07484bb191faae6d8d0a817878117b3f0
 package.divider.horizontal=0.6
-package.divider.vertical=0.8270944741532977
-package.editor.height=457
-package.editor.width=639
+package.divider.vertical=0.8280632411067194
+package.editor.height=412
+package.editor.width=608
 package.editor.x=511
 package.editor.y=184
 package.frame.height=625

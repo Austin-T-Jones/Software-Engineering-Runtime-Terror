@@ -36,6 +36,9 @@ public class MapMakerUI extends Application
 {
     //variables
     Image activeTileImage = new Image("Tiles/!EraseTile.png");
+    MapGrid groundGrid;
+    MapGrid wallGrid;
+    MapGrid decorGrid;
 
     public static void main(String[] args) 
     {
@@ -95,6 +98,9 @@ public class MapMakerUI extends Application
         Dialog<Pair<String, String>> mapDialog = new Dialog<>();
         mapDialog.setTitle("MapMaker");
         mapDialog.setHeaderText(" Set Custom Map Size : ");
+        mapDialog.setGraphic(new ImageView(new Image("icons/grid.png")));
+        Stage gridStage = (Stage)mapDialog.getDialogPane().getScene().getWindow();
+        gridStage.getIcons().add(new Image("icons/help.png"));
 
         ButtonType mapSizeBtnType = new ButtonType("Create Map", ButtonData.OK_DONE);
         mapDialog.getDialogPane().getButtonTypes().addAll(mapSizeBtnType);
@@ -143,8 +149,7 @@ public class MapMakerUI extends Application
         Button groundButton = new Button("Ground Layer");
         Button wallsButton = new Button("Wall Layer");
         Button decorButton = new Button("Decor Layer");
-        Button gmButton = new Button("GM Layer");
-        layerButtons.getChildren().addAll(groundButton, wallsButton, decorButton, gmButton);
+        layerButtons.getChildren().addAll(groundButton, wallsButton, decorButton);
 
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
 
@@ -162,18 +167,16 @@ public class MapMakerUI extends Application
             int numHeight = Integer.parseInt(textHeight);
 
             //initialize mapgrids using data from the textfields
-            MapGrid groundGrid = new MapGrid(numWidth, numHeight);
-            MapGrid wallGrid = new MapGrid(numWidth, numHeight);
-            MapGrid decorGrid = new MapGrid(numWidth,numHeight);
-            MapGrid gmGrid = new MapGrid(numWidth,numHeight);
+            groundGrid = new MapGrid(numWidth, numHeight);
+            wallGrid = new MapGrid(numWidth, numHeight);
+            decorGrid = new MapGrid(numWidth,numHeight);
 
             //create StackPane for layers
-            stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid, gmGrid);
+            stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid);
             root.setCenter(stackPane);
             //ground layer is active by default
             wallGrid.setMouseTransparent(true);
             decorGrid.setMouseTransparent(true);
-            gmGrid.setMouseTransparent(true);
 
             //layer button events; change active layer and disable interaction with other
             //layers when relevant button is pressed
@@ -182,29 +185,19 @@ public class MapMakerUI extends Application
                     groundGrid.setMouseTransparent(false);
                     wallGrid.setMouseTransparent(true);
                     decorGrid.setMouseTransparent(true);
-                    gmGrid.setMouseTransparent(true);
                 });
             wallsButton.setOnAction((ActionEvent event) -> 
                 {
                     groundGrid.setMouseTransparent(true);
                     wallGrid.setMouseTransparent(false);
                     decorGrid.setMouseTransparent(true);
-                    gmGrid.setMouseTransparent(true);
                 });            
             decorButton.setOnAction((ActionEvent event) -> 
                 {
                     groundGrid.setMouseTransparent(true);
                     wallGrid.setMouseTransparent(true);
                     decorGrid.setMouseTransparent(false);
-                    gmGrid.setMouseTransparent(true);
                 });            
-            gmButton.setOnAction((ActionEvent event) -> 
-                {
-                    groundGrid.setMouseTransparent(true);
-                    wallGrid.setMouseTransparent(true);
-                    decorGrid.setMouseTransparent(true);
-                    gmGrid.setMouseTransparent(false);
-                });
 
             //get list of all MapGridTiles in MapGrid and listen for their events
             for(MapGridTile mapTile : groundGrid.getAllMapTiles())
@@ -219,10 +212,6 @@ public class MapMakerUI extends Application
             {
                 mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
             }        
-            for(MapGridTile mapTile : gmGrid.getAllMapTiles())
-            {
-                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-            }
 
         }
         //aboutProgram funcitonality
@@ -245,8 +234,7 @@ public class MapMakerUI extends Application
         newFile.setOnAction(
             (ActionEvent event) ->
             {
-                //mapGrid = new MapGrid(10, 10);
-                //root.setCenter(mapGrid);
+
             }
         );
 
@@ -333,5 +321,10 @@ public class MapMakerUI extends Application
     void SetActiveTileImage(Image newImage)
     {
         this.activeTileImage = newImage;
+    }
+
+    void MakeMap(String height, String width)
+    {
+
     }
 }
