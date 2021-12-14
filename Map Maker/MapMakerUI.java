@@ -177,6 +177,7 @@ public class MapMakerUI extends Application
         //get user input for map size & create & display MapGrid layers 
         //when user clicks create map, take data from textfields and create a map with input
         StackPane stackPane = new StackPane();
+        ScrollPane mapScroll = new ScrollPane();
 
         mapDialog.showAndWait();
 
@@ -197,9 +198,9 @@ public class MapMakerUI extends Application
         
         
         //checks for min and max range and keeps prompting until legal integers are inputted 
-        while(numWidth < 1 || numWidth > 32 || numHeight < 1 || numWidth > 32)
+        while(numWidth < 1 || numWidth > 16 || numHeight < 1 || numWidth > 16)
         {
-            mapDialog.setHeaderText("Only enter numbers between 1-15");
+            mapDialog.setHeaderText("Only enter numbers between 1-16");
             mapDialog.showAndWait();
             textWidth = mapWidth.getText();
             textHeight = mapHeight.getText();
@@ -223,7 +224,10 @@ public class MapMakerUI extends Application
 
         //create StackPane for layers
         stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid);
-        root.setCenter(stackPane);
+        mapScroll.setContent(stackPane);
+        mapScroll.setFitToWidth(true);
+        mapScroll.setFitToHeight(true);
+        root.setCenter(mapScroll);
 
         //ground layer is active by default
         wallGrid.setMouseTransparent(true);
