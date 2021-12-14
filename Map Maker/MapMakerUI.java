@@ -39,7 +39,7 @@ public class MapMakerUI extends Application
     MapGrid groundGrid;
     MapGrid wallGrid;
     MapGrid decorGrid;
-
+    private int numWidth, numHeight;
     public static void main(String[] args) 
     {
         try
@@ -101,15 +101,19 @@ public class MapMakerUI extends Application
         mapDialog.setGraphic(new ImageView(new Image("icons/grid.png")));
         Stage gridStage = (Stage)mapDialog.getDialogPane().getScene().getWindow();
         gridStage.getIcons().add(new Image("icons/help.png"));
-
+        
+        //creating buttontype and adding to mapdialog 
         ButtonType mapSizeBtnType = new ButtonType("Create Map", ButtonData.OK_DONE);
         mapDialog.getDialogPane().getButtonTypes().addAll(mapSizeBtnType);
-
+        
+        //creating gridpane for mapdialog
         GridPane mapSizeGrid = new GridPane();
         mapSizeGrid.setHgap(10);
         mapSizeGrid.setVgap(10);
         mapSizeGrid.setPadding(new Insets(20,150,10,10));
-
+        
+        
+       //creating textfields for mapdialog and adding to gridpane 
         TextField mapWidth = new TextField();
         mapWidth.setPromptText("Width"); 
 
@@ -120,8 +124,9 @@ public class MapMakerUI extends Application
         mapSizeGrid.add(mapWidth, 1, 0);
         mapSizeGrid.add(new Label("Enter Height : "), 0, 1);
         mapSizeGrid.add(mapHeight, 1, 1);
+        
+        //getDialogPane().setContent sets the content of the GridPane to the Mapsize Dialog Box 
         mapDialog.getDialogPane().setContent(mapSizeGrid);
-        Optional<Pair<String, String>> result = mapDialog.showAndWait();
 
         //add Tile Palette and Layers windows to left side of screen
         VBox vbox = new VBox();
@@ -156,64 +161,77 @@ public class MapMakerUI extends Application
         //get user input for map size & create & display MapGrid layers 
         //when user clicks create map, take data from textfields and create a map with input
         StackPane stackPane = new StackPane();
-        if(result.isPresent())
+
+        mapDialog.showAndWait();
+
+        //retrieve data from textfields
+        String textWidth = mapWidth.getText();
+        String textHeight = mapHeight.getText();
+
+        //read only integers from textfields and store in integer 
+        numWidth = Integer.parseInt(textWidth);
+        numHeight = Integer.parseInt(textHeight);
+        
+        //checks for min and max range and keeps prompting until legal integers are inputted 
+        do
         {
-            //retrieve data from textfields
-            String textWidth = mapWidth.getText();
-            String textHeight = mapHeight.getText();
+            mapDialog.setHeaderText("Only enter numbers between 1-32");
+            mapDialog.showAndWait();
+            textWidth = mapWidth.getText();
+            textHeight = mapHeight.getText();
+            numWidth = Integer.parseInt(textWidth);
+            numHeight = Integer.parseInt(textHeight);
 
-            //read only integers from textfields and store in integer 
-            int numWidth = Integer.parseInt(textWidth);
-            int numHeight = Integer.parseInt(textHeight);
+        }while(numWidth < 1 || numWidth > 32 || numHeight < 1 || numWidth > 32);
 
-            //initialize mapgrids using data from the textfields
-            groundGrid = new MapGrid(numWidth, numHeight);
-            wallGrid = new MapGrid(numWidth, numHeight);
-            decorGrid = new MapGrid(numWidth,numHeight);
+        //initialize mapgrids using data from the textfields
+        groundGrid = new MapGrid(numWidth, numHeight);
+        wallGrid = new MapGrid(numWidth, numHeight);
+        decorGrid = new MapGrid(numWidth,numHeight);
 
-            //create StackPane for layers
-            stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid);
-            root.setCenter(stackPane);
-            //ground layer is active by default
-            wallGrid.setMouseTransparent(true);
-            decorGrid.setMouseTransparent(true);
+        //create StackPane for layers
+        stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid);
+        root.setCenter(stackPane);
 
-            //layer button events; change active layer and disable interaction with other
-            //layers when relevant button is pressed
-            groundButton.setOnAction((ActionEvent event) -> 
-                {
-                    groundGrid.setMouseTransparent(false);
-                    wallGrid.setMouseTransparent(true);
-                    decorGrid.setMouseTransparent(true);
-                });
-            wallsButton.setOnAction((ActionEvent event) -> 
-                {
-                    groundGrid.setMouseTransparent(true);
-                    wallGrid.setMouseTransparent(false);
-                    decorGrid.setMouseTransparent(true);
-                });            
-            decorButton.setOnAction((ActionEvent event) -> 
-                {
-                    groundGrid.setMouseTransparent(true);
-                    wallGrid.setMouseTransparent(true);
-                    decorGrid.setMouseTransparent(false);
-                });            
+        //ground layer is active by default
+        wallGrid.setMouseTransparent(true);
+        decorGrid.setMouseTransparent(true);
 
-            //get list of all MapGridTiles in MapGrid and listen for their events
-            for(MapGridTile mapTile : groundGrid.getAllMapTiles())
+        //layer button events; change active layer and disable interaction with other
+        //layers when relevant button is pressed
+        groundButton.setOnAction((ActionEvent event) -> 
             {
-                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-            }
-            for(MapGridTile mapTile : wallGrid.getAllMapTiles())
+                groundGrid.setMouseTransparent(false);
+                wallGrid.setMouseTransparent(true);
+                decorGrid.setMouseTransparent(true);
+            });
+        wallsButton.setOnAction((ActionEvent event) -> 
             {
-                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-            }       
-            for(MapGridTile mapTile : decorGrid.getAllMapTiles())
+                groundGrid.setMouseTransparent(true);
+                wallGrid.setMouseTransparent(false);
+                decorGrid.setMouseTransparent(true);
+            });            
+        decorButton.setOnAction((ActionEvent event) -> 
             {
-                mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
-            }        
+                groundGrid.setMouseTransparent(true);
+                wallGrid.setMouseTransparent(true);
+                decorGrid.setMouseTransparent(false);
+            });            
 
+        //get list of all MapGridTiles in MapGrid and listen for their events
+        for(MapGridTile mapTile : groundGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
         }
+        for(MapGridTile mapTile : wallGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+        }       
+        for(MapGridTile mapTile : decorGrid.getAllMapTiles())
+        {
+            mapTile.setOnAction((ActionEvent event) -> mapTile.setImage(activeTileImage));
+        }        
+
         //aboutProgram funcitonality
         aboutProgram.setOnAction(
             (ActionEvent event) ->
@@ -323,8 +341,4 @@ public class MapMakerUI extends Application
         this.activeTileImage = newImage;
     }
 
-    void MakeMap(String height, String width)
-    {
-
-    }
 }

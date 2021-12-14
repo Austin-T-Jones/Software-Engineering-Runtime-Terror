@@ -1,6 +1,6 @@
 #BlueJ class context
 comment0.target=MapMakerUI
-comment0.text=\r\n\ User\ interface\ for\ the\ Map\ Maker\ program\r\n
+comment0.text=\n\ User\ interface\ for\ the\ Map\ Maker\ program\n
 comment1.params=args
 comment1.target=void\ main(java.lang.String[])
 comment2.params=mainStage
@@ -9,6 +9,4 @@ comment3.params=currentTab\ folderName
 comment3.target=void\ CreatePalette(javafx.scene.control.Tab,\ java.lang.String)
 comment4.params=newImage
 comment4.target=void\ SetActiveTileImage(javafx.scene.image.Image)
-comment5.params=height\ width
-comment5.target=void\ MakeMap(java.lang.String,\ java.lang.String)
-numComments=6
+numComments=5
