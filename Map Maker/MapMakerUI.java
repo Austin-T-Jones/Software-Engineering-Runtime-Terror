@@ -113,12 +113,28 @@ public class MapMakerUI extends Application
         mapSizeGrid.setPadding(new Insets(20,150,10,10));
         
         
-       //creating textfields for mapdialog and adding to gridpane 
+        //creating textfields for mapdialog and adding to gridpane 
         TextField mapWidth = new TextField();
         mapWidth.setPromptText("Width"); 
 
         TextField mapHeight = new TextField();
-        mapHeight.setPromptText("Height"); 
+        mapHeight.setPromptText("Height");
+        
+        //ensure that both TextFields only acccept digits as input
+        mapWidth.setOnKeyTyped(e -> 
+        {
+            char input = e.getCharacter().charAt(0);
+            if (Character.isDigit(input) != true) {
+                e.consume();
+            }
+        });
+        mapHeight.setOnKeyTyped(e -> 
+        {
+            char input = e.getCharacter().charAt(0);
+            if (Character.isDigit(input) != true) {
+                e.consume();
+            }
+        });
 
         mapSizeGrid.add(new Label("Enter Width : "), 0, 0);
         mapSizeGrid.add(mapWidth, 1, 0);
@@ -167,22 +183,38 @@ public class MapMakerUI extends Application
         //retrieve data from textfields
         String textWidth = mapWidth.getText();
         String textHeight = mapHeight.getText();
-
-        //read only integers from textfields and store in integer 
-        numWidth = Integer.parseInt(textWidth);
-        numHeight = Integer.parseInt(textHeight);
+        if(textWidth.isEmpty() || textHeight.isEmpty())
+        {
+            numWidth = 0;
+            numHeight = 0;
+        }
+        else
+        {
+            //read only integers from textfields and store in integer 
+            numWidth = Integer.parseInt(textWidth);
+            numHeight = Integer.parseInt(textHeight);
+        }
+        
         
         //checks for min and max range and keeps prompting until legal integers are inputted 
-        do
+        while(numWidth < 1 || numWidth > 32 || numHeight < 1 || numWidth > 32)
         {
-            mapDialog.setHeaderText("Only enter numbers between 1-32");
+            mapDialog.setHeaderText("Only enter numbers between 1-15");
             mapDialog.showAndWait();
             textWidth = mapWidth.getText();
             textHeight = mapHeight.getText();
-            numWidth = Integer.parseInt(textWidth);
-            numHeight = Integer.parseInt(textHeight);
-
-        }while(numWidth < 1 || numWidth > 32 || numHeight < 1 || numWidth > 32);
+            if(textWidth.isEmpty() || textHeight.isEmpty())
+            {
+                numWidth = 0;
+                numHeight = 0;
+            }
+            else
+            {
+                //read only integers from textfields and store in integer 
+                numWidth = Integer.parseInt(textWidth);
+                numHeight = Integer.parseInt(textHeight);
+            }
+        };
 
         //initialize mapgrids using data from the textfields
         groundGrid = new MapGrid(numWidth, numHeight);
