@@ -1,16 +1,25 @@
 .root
 {
-    
+    -fx-font-weight: bold;
 }
 
-.label
+.vbox
 {
-    
+    -fx-alignment: center;
+    -fx-padding: 10 0 10 0;
+    -fx-spacing: 10;
+    -fx-border-color: gray;
 }
 
-.button
+.palettes
 {
-    
+    -fx-border-color: gray;
+}
+
+.layers
+{
+    -fx-alignment: center;
+    -fx-scale-shape: true;
 }
 
 .palette-tile
