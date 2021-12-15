@@ -62,7 +62,7 @@ public class MapMakerUI extends Application
         mainStage.setMaximized(true);
 
         //add application icon
-        mainStage.getIcons().add(new Image("icons/color_wheel.png"));
+        mainStage.getIcons().add(new Image("icons/grid.png"));
 
         BorderPane root = new BorderPane();
 
@@ -79,10 +79,6 @@ public class MapMakerUI extends Application
         Menu helpMenu = new Menu("Help");
 
         //create MenuItems
-        MenuItem newFile = new MenuItem("New Map...");
-        newFile.setGraphic(new ImageView(new Image("icons/page.png")));
-        MenuItem openFile = new MenuItem("Open Map...");
-        openFile.setGraphic(new ImageView(new Image("icons/folder.png")));
         MenuItem saveFile = new MenuItem("Save Map...");
         saveFile.setGraphic(new ImageView(new Image("icons/disk.png")));
         //TODO: add more help menus regarding different parts of the program
@@ -90,7 +86,7 @@ public class MapMakerUI extends Application
         aboutProgram.setGraphic(new ImageView(new Image("icons/information.png")));
 
         //add MenuItems to Menus
-        fileMenu.getItems().addAll(newFile, openFile, saveFile);
+        fileMenu.getItems().add(saveFile);
         helpMenu.getItems().add(aboutProgram);
         bar.getMenus().addAll(fileMenu, helpMenu);
 
@@ -113,12 +109,28 @@ public class MapMakerUI extends Application
         mapSizeGrid.setPadding(new Insets(20,150,10,10));
         
         
-       //creating textfields for mapdialog and adding to gridpane 
+        //creating textfields for mapdialog and adding to gridpane 
         TextField mapWidth = new TextField();
         mapWidth.setPromptText("Width"); 
 
         TextField mapHeight = new TextField();
-        mapHeight.setPromptText("Height"); 
+        mapHeight.setPromptText("Height");
+        
+        //ensure that both TextFields only acccept digits as input
+        mapWidth.setOnKeyTyped(e -> 
+        {
+            char input = e.getCharacter().charAt(0);
+            if (Character.isDigit(input) != true) {
+                e.consume();
+            }
+        });
+        mapHeight.setOnKeyTyped(e -> 
+        {
+            char input = e.getCharacter().charAt(0);
+            if (Character.isDigit(input) != true) {
+                e.consume();
+            }
+        });
 
         mapSizeGrid.add(new Label("Enter Width : "), 0, 0);
         mapSizeGrid.add(mapWidth, 1, 0);
@@ -133,7 +145,7 @@ public class MapMakerUI extends Application
         //have these windows take up 15% of the screen size
         vbox.prefWidthProperty().bind(mainStage.widthProperty().multiply(0.15));
         root.setLeft(vbox);
-        Label tilePaletteLabel = new Label("Tile Palettes"); //TODO: improve labels
+        Label tilePaletteLabel = new Label("Tile Palettes");
         Label layerLabel = new Label("Layers");
 
         //tabs for Tile Palette
@@ -145,44 +157,65 @@ public class MapMakerUI extends Application
         CreatePalette(paletteB, "Indoors");
         Tab paletteC = new Tab("Decorative");
         CreatePalette(paletteC, "Decorative");
-        Tab paletteD = new Tab("Misc.");
-        CreatePalette(paletteD, "Decorative");
-        tilePaletteTabs.getTabs().addAll(paletteA, paletteB, paletteC, paletteD);
+        tilePaletteTabs.getTabs().addAll(paletteA, paletteB, paletteC);
 
         //buttons for Layers
         VBox layerButtons = new VBox();
         Button groundButton = new Button("Ground Layer");
+        groundButton.setStyle("-fx-pref-width: 200px;");
         Button wallsButton = new Button("Wall Layer");
+        wallsButton.setStyle("-fx-pref-width: 200px;");
         Button decorButton = new Button("Decor Layer");
+        decorButton.setStyle("-fx-pref-width: 200px;");
         layerButtons.getChildren().addAll(groundButton, wallsButton, decorButton);
 
+        tilePaletteTabs.getStyleClass().add("palettes");
+        layerButtons.getStyleClass().add("layers");
+        vbox.getStyleClass().add("vbox");
         vbox.getChildren().addAll(tilePaletteLabel, tilePaletteTabs, layerLabel, layerButtons);
 
         //get user input for map size & create & display MapGrid layers 
         //when user clicks create map, take data from textfields and create a map with input
         StackPane stackPane = new StackPane();
+        ScrollPane mapScroll = new ScrollPane();
 
         mapDialog.showAndWait();
 
         //retrieve data from textfields
         String textWidth = mapWidth.getText();
         String textHeight = mapHeight.getText();
-
-        //read only integers from textfields and store in integer 
-        numWidth = Integer.parseInt(textWidth);
-        numHeight = Integer.parseInt(textHeight);
+        if(textWidth.isEmpty() || textHeight.isEmpty())
+        {
+            numWidth = 0;
+            numHeight = 0;
+        }
+        else
+        {
+            //read only integers from textfields and store in integer 
+            numWidth = Integer.parseInt(textWidth);
+            numHeight = Integer.parseInt(textHeight);
+        }
+        
         
         //checks for min and max range and keeps prompting until legal integers are inputted 
-        do
+        while(numWidth < 1 || numWidth > 16 || numHeight < 1 || numWidth > 16)
         {
-            mapDialog.setHeaderText("Only enter numbers between 1-32");
+            mapDialog.setHeaderText("Only enter numbers between 1-16");
             mapDialog.showAndWait();
             textWidth = mapWidth.getText();
             textHeight = mapHeight.getText();
-            numWidth = Integer.parseInt(textWidth);
-            numHeight = Integer.parseInt(textHeight);
-
-        }while(numWidth < 1 || numWidth > 32 || numHeight < 1 || numWidth > 32);
+            if(textWidth.isEmpty() || textHeight.isEmpty())
+            {
+                numWidth = 0;
+                numHeight = 0;
+            }
+            else
+            {
+                //read only integers from textfields and store in integer 
+                numWidth = Integer.parseInt(textWidth);
+                numHeight = Integer.parseInt(textHeight);
+            }
+        };
 
         //initialize mapgrids using data from the textfields
         groundGrid = new MapGrid(numWidth, numHeight);
@@ -191,7 +224,10 @@ public class MapMakerUI extends Application
 
         //create StackPane for layers
         stackPane.getChildren().addAll(groundGrid, wallGrid, decorGrid);
-        root.setCenter(stackPane);
+        mapScroll.setContent(stackPane);
+        mapScroll.setFitToWidth(true);
+        mapScroll.setFitToHeight(true);
+        root.setCenter(mapScroll);
 
         //ground layer is active by default
         wallGrid.setMouseTransparent(true);
@@ -244,15 +280,6 @@ public class MapMakerUI extends Application
                 Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image("icons/information.png"));
                 infoAlert.showAndWait();
-            }
-        );
-
-        //newFile funcitonality
-        // TODO: needs to be improved so the grid will properly read user input
-        newFile.setOnAction(
-            (ActionEvent event) ->
-            {
-
             }
         );
 
