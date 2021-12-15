@@ -275,7 +275,7 @@ public class MapMakerUI extends Application
                 Alert infoAlert = new Alert(AlertType.INFORMATION);
                 infoAlert.setTitle("About");
                 infoAlert.setHeaderText("Have questions?");
-                infoAlert.setContentText("Select a tile on the left side and click anywhere on the canvas to make your map!");
+                infoAlert.setContentText("Select a tile on the left side and a layer inwhich to edit on. After that, click anywhere on the canvas to make your map! The wall layer sits on top of ground, and decor sits ontop of every layer.");
                 infoAlert.setGraphic(new ImageView(new Image("icons/help.png")));
                 Stage alertStage = (Stage)infoAlert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image("icons/information.png"));
