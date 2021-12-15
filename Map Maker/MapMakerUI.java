@@ -81,7 +81,6 @@ public class MapMakerUI extends Application
         //create MenuItems
         MenuItem saveFile = new MenuItem("Save Map...");
         saveFile.setGraphic(new ImageView(new Image("icons/disk.png")));
-        //TODO: add more help menus regarding different parts of the program
         MenuItem aboutProgram = new MenuItem("About this program...");
         aboutProgram.setGraphic(new ImageView(new Image("icons/information.png")));
 
@@ -347,7 +346,7 @@ public class MapMakerUI extends Application
             //listen for when a PaletteTile is selected
             newTile.setOnAction((ActionEvent event) -> SetActiveTileImage(newTile.getImage()));
 
-            paletteTileBox.add(newTile, x, y); //TODO: make PaletteTiles smaller
+            paletteTileBox.add(newTile, x, y);
             x++;
 
             //find coordinates for new tile
